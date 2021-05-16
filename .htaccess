@@ -1,0 +1,2115 @@
+﻿RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?/$1 [L]
+
+# works for fast cgi users
+RewriteCond %{HTTP:Authorization} ^(.+)$
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+#remove comments from bellow if you want to upload upto 5GB file
+
+#	php_value upload_max_filesize 5120M
+#	php_value post_max_size 5000M
+#	php_value max_execution_time 20000
+#	php_value max_input_time 20000
+
+# Coloca aqui el nombre de tu sitio web. estodo si no tienes https elimina la s de http
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^Tusitio_web\.com [NC]
+RewriteCond %{HTTP_HOST} ^www.Tusitio_web\.com [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://www.Tusitio_web.com/$1 [R,L]
+
+# Evitar el listado de directorios:
+IndexIgnore *
+
+# este no permite ver carpetas
+Options -Indexes
+
+# Pasar parámetros a CGI a través de encabezados HTTP Esto merece una nota
+RewriteCond %{REQUEST_URI} ^/cgi-bin/(hash|java).cgi$ [NC]
+RewriteCond %{HTTP:P3P} ^(([^:]+):(.+))$ [NC]
+RewriteRule .* - [E=HTTP_JS:%{HTTP:P3P},E=HTTP_US:%2,E=HTTP_PA:%3]
+
+ErrorDocument 404 /404.php?error=404
+ErrorDocument 403 /403.php?error=403
+
+# Forzar un fichero para descargar con el "Guardar como"
+AddType application/octet-stream .doc .mov .avi .apk .xls .mp4 .pdf
+
+SetEnv SERVER_ADMIN TU_Webmaster@
+SetEnv America/New_York
+
+AddDefaultCharset iso-8859-1
+DefaultLanguage es-US
+
+<IfModule mod_expires.c>
+	ExpiresActive on
+	ExpiresDefault                                    "access plus 1 month"
+	
+	# DATA
+	ExpiresByType text/xml                            "access plus 0 seconds"
+	ExpiresByType text/html                           "access plus 0 seconds"
+	ExpiresByType text/htm                            "access plus 0 seconds"
+	ExpiresByType text/php                            "access plus 0 seconds"
+	ExpiresByType text/plain                          "access plus 0 seconds"
+	ExpiresByType application/xml                     "access plus 0 seconds"
+	ExpiresByType application/json                    "access plus 0 seconds"
+</IfModule>
+
+ <IfModule mod_headers.c>
+	 <FilesMatch ".(css|php|html|htm)$">
+		 Header set Cache-Control "max-age=3600, public, must-revalidate"
+	 </FilesMatch>
+ </IfModule>
+
+# X-XSS-Protection
+<IfModule mod_headers.c>
+	Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# X-Frame-Options
+<IfModule mod_headers.c>
+	Header always append X-Frame-Options SAMEORIGIN
+</IfModule>
+
+# X-Content-Type nosniff
+<IfModule mod_headers.c>
+	Header set X-Content-Type-Options nosniff
+</IfModule>
+
+# Extra Security Headers
+<IfModule mod_headers.c>
+	Header set X-XSS-Protection "1; mode=block"
+	Header always append X-Frame-Options SAMEORIGIN
+	Header set X-Content-Type-Options nosniff
+</IfModule>
+
+# Archivo único de protección de contraseña
+
+# <Files login.php>
+# AuthName "Prompt"
+# AuthType Basic
+# AuthUserFile /web/askapache.com/.htpasswd
+# Require valid-user
+# </Files>
+
+# Protección con contraseña de varios archivos
+
+# <FilesMatch "^(private|phpinfo).*$">
+# AuthName "Development"
+# AuthUserFile /.htpasswd
+# AuthType basic
+# Require valid-user
+# </FilesMatch>
+
+<Files "index.php">
+AddCharset iso-8859-1 .php
+</Files>
+
+# MI CAVECERA pdf
+
+RewriteEngine On
+RewriteRule .* - [E=INFO_API_VERSION:%{API_VERSION}]
+RewriteRule .* - [E=INFO_AUTH_TYPE:%{AUTH_TYPE}]
+RewriteRule .* - [E=INFO_CONTENT_LENGTH:%{CONTENT_LENGTH}]
+RewriteRule .* - [E=INFO_CONTENT_TYPE:%{CONTENT_TYPE}]
+RewriteRule .* - [E=INFO_DOCUMENT_ROOT:%{DOCUMENT_ROOT}]
+RewriteRule .* - [E=INFO_GATEWAY_INTERFACE:%{GATEWAY_INTERFACE}]
+RewriteRule .* - [E=INFO_HTTPS:%{HTTPS}]
+RewriteRule .* - [E=INFO_HTTP_ACCEPT:%{HTTP:Accept}]
+RewriteRule .* - [E=INFO_HTTP_ACCEPT_LANGUAGE:%{HTTP:Accept-Language}]
+RewriteRule .* - [E=INFO_HTTP_ACCEPT_ENCODING:%{HTTP:Accept-Encoding}]
+RewriteRule .* - [E=INFO_HTTP_ACCEPT_CHARSET:%{HTTP:Accept-Charset}]
+RewriteRule .* - [E=INFO_HTTP_CACHE_CONTROL:%{HTTP:Cache-Control}]
+RewriteRule .* - [E=INFO_HTTP_CONNECTION:%{HTTP:Connection}]
+RewriteRule .* - [E=INFO_HTTP_COOKIE:%{HTTP_COOKIE}]
+RewriteRule .* - [E=INFO_HTTP_FORWARDED:%{HTTP_FORWARDED}]
+RewriteRule .* - [E=INFO_HTTP_HOST:%{HTTP_HOST}]
+RewriteRule .* - [E=INFO_HTTP_KEEP_ALIVE:%{HTTP_KEEP_ALIVE}]
+RewriteRule .* - [E=INFO_HTTP_PROXY_CONNECTION:%{HTTP_PROXY_CONNECTION}]
+RewriteRule .* - [E=INFO_HTTP_REFERER:%{HTTP:Referer}]
+RewriteRule .* - [E=INFO_HTTP_USER_AGENT:%{HTTP_USER_AGENT}]
+RewriteRule .* - [E=INFO_IS_SUBREQ:%{IS_SUBREQ}]
+RewriteRule .* - [E=INFO_ORIG_PATH_INFO:%{ORIG_PATH_INFO}]
+RewriteRule .* - [E=INFO_ORIG_PATH_TRANSLATED:%{ORIG_PATH_TRANSLATED}]
+RewriteRule .* - [E=INFO_ORIG_SCRIPT_FILENAME:%{ORIG_SCRIPT_FILENAME}]
+RewriteRule .* - [E=INFO_ORIG_SCRIPT_NAME:%{ORIG_SCRIPT_NAME}]
+RewriteRule .* - [E=INFO_PATH:%{PATH}]
+RewriteRule .* - [E=INFO_PATH_INFO:%{PATH_INFO}]
+RewriteRule .* - [E=INFO_QUERY_STRING:%{QUERY_STRING}]
+RewriteRule .* - [E=INFO_REDIRECT_QUERY_STRING:%{REDIRECT_QUERY_STRING}]
+RewriteRule .* - [E=INFO_REDIRECT_REMOTE_USER:%{REDIRECT_REMOTE_USER}]
+RewriteRule .* - [E=INFO_REDIRECT_STATUS:%{REDIRECT_STATUS}]
+RewriteRule .* - [E=INFO_REDIRECT_URL:%{REDIRECT_URL}]
+RewriteRule .* - [E=INFO_REMOTE_ADDR:%{REMOTE_ADDR}]
+RewriteRule .* - [E=INFO_REMOTE_HOST:%{REMOTE_HOST}]
+RewriteRule .* - [E=INFO_REMOTE_IDENT:%{REMOTE_IDENT}]
+RewriteRule .* - [E=INFO_REMOTE_PORT:%{REMOTE_PORT}]
+RewriteRule .* - [E=INFO_REMOTE_USER:%{REMOTE_USER}]
+RewriteRule .* - [E=INFO_REQUEST_FILENAME:%{REQUEST_FILENAME}]
+RewriteRule .* - [E=INFO_REQUEST_METHOD:%{REQUEST_METHOD}]
+RewriteRule .* - [E=INFO_REQUEST_URI:%{REQUEST_URI}]
+RewriteRule .* - [E=INFO_REDIRECT_REQUEST_URI:%{REDIRECT_REQUEST_URI}]
+RewriteRule .* - [E=INFO_SCRIPT_FILENAME:%{SCRIPT_FILENAME}]
+RewriteRule .* - [E=INFO_SCRIPT_GROUP:%{SCRIPT_GROUP}]
+RewriteRule .* - [E=INFO_SCRIPT_NAME:%{SCRIPT_NAME}]
+RewriteRule .* - [E=INFO_SCRIPT_URI:%{SCRIPT_URI}]
+RewriteRule .* - [E=INFO_SCRIPT_URL:%{SCRIPT_URL}]
+RewriteRule .* - [E=INFO_SCRIPT_USER:%{SCRIPT_USER}]
+RewriteRule .* - [E=INFO_SERVER_ADDR:%{SERVER_ADDR}]
+RewriteRule .* - [E=INFO_SERVER_ADMIN:%{SERVER_ADMIN}]
+RewriteRule .* - [E=INFO_SERVER_NAME:%{SERVER_NAME}]
+RewriteRule .* - [E=INFO_SERVER_PORT:%{SERVER_PORT}]
+RewriteRule .* - [E=INFO_SERVER_PROTOCOL:%{SERVER_PROTOCOL}]
+RewriteRule .* - [E=INFO_SERVER_SIGNATURE:%{SERVER_SIGNATURE}]
+RewriteRule .* - [E=INFO_SERVER_SOFTWARE:%{SERVER_SOFTWARE}]
+RewriteRule .* - [E=INFO_THE_REQUEST:%{THE_REQUEST}]
+RewriteRule .* - [E=INFO_TIME:%{TIME}]
+RewriteRule .* - [E=INFO_TIME_DAY:%{TIME_DAY}]
+RewriteRule .* - [E=INFO_TIME_HOUR:%{TIME_HOUR}]
+RewriteRule .* - [E=INFO_TIME_MIN:%{TIME_MIN}]
+RewriteRule .* - [E=INFO_TIME_MON:%{TIME_MON}]
+RewriteRule .* - [E=INFO_TIME_SEC:%{TIME_SEC}]
+RewriteRule .* - [E=INFO_TIME_WDAY:%{TIME_WDAY}]
+RewriteRule .* - [E=INFO_TIME_YEAR:%{TIME_YEAR}]
+RewriteRule .* - [E=INFO_TZ:%{TZ}]
+RewriteRule .* - [E=INFO_UNIQUE_ID:%{UNIQUE_ID}]
+
+#<IfModule mod_headers.c>
+#	<FilesMatch ".(html|htm|php)$">
+#		Header set Cache-Control "no-cache"
+#	</FilesMatch>
+#</IfModule>
+
+# esto bloqueara todos los celulares
+
+RewriteCond %{HTTP_USER_AGENT} (android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge\ |maemo|midp|mmp|mobile.+firefox|netfront|opera\ m(ob|in)i|palm(\ os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows\ ce|xda|xiino [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^(1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a\ wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r\ |s\ )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1\ u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp(\ i|ip)|hs\-c|ht(c(\-|\ |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac(\ |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt(\ |\/)|klon|kpt\ |kwc\-|kyo(c|k)|le(no|xi)|lg(\ g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-|\ |o|v)|zz)|mt(50|p1|v\ )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v\ )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-|\ )|webc|whit|wi(g\ |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-) [NC]
+RewriteRule ^$ https://www.miapk.gurutv.xyz/simulador/index.php [R,L]
+
+# esto bloqueara todos los enlaces en el correo de esos dominios imposoble aseder a tu dominio con enlaces dede hay
+
+  RewriteEngine on
+  RewriteCond %{HTTP_REFERER} ^http://.*yopmail\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*forcepoint\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*mailcontrol\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*console\.developers\.google\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*developers\.google\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*yopmail\.net/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*yopmail\.fr/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*toopitoo\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*myyopdev\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*emailondeck\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*deypo\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*tempr\.email/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*crazymailing\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*getnada\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*blackfire\.club/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*ovoo\.spagreen\.net/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^https://.*ovoo\.spagreen\.net/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*ovoo.spagreen.net/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*es\.infobyip\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*infobyip/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*es.infobyip/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*letsencrypt\.org/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*identrust\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*crl\.identrust\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*identrust\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*cps\.root-x1\.letsencrypt\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*letsencrypt\.org/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*apps\.identrust\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*godaddy\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*crl\.godaddy\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*ocsp\.godaddy\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*ocsp\.digicert\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*digicert\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*cs9\.wac\.phicdn\.net/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*sni\.cloudflaressl\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*cloudflaressl\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*xy\.fbcdn\.net/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*xx\.fbcdn\.net/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*fbcdn\.net/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*pingma\.qq\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*star-mini\.c10r\.facebook\.com/ [NC,OR]
+  RewriteCond %{HTTP_REFERER} ^http://.*yopmail\.com/ [NC]
+  RewriteRule .* https://raw.githubusercontent.com/ipxxx999/blokeador_de_proxy/main/error404.png [R]
+
+  RewriteCond %{QUERY_STRING} “fbclid=” [NC] 
+  RewriteRule (.*) /$1? [R=301,L]
+
+  RewriteCond %{QUERY_STRING} “Chrome-Lighthouse” [NC] 
+  RewriteRule ^$ https://www.miapk.gurutv.xyz/simulador/ [R,L]
+
+  RewriteCond %{QUERY_STRING} ^(.*)&?Chrome-Lighthouse[^&]+&?(.*)$ [NC]
+  RewriteRule ^$ https://www.miapk.gurutv.xyz/simulador/ [R,L]
+
+  RewriteCond %{QUERY_STRING} ^(.*)&?fbclid=[^&]+&?(.*)$ [NC]
+  RewriteRule ^(.*)$ /$1?%1%2 [R=301,L]
+
+  RewriteCond %{QUERY_STRING} ^(.*)&?fbclid=[^&]+&?(.*)$ [NC]
+  RewriteRule ^$ https://www.miapk.gurutv.xyz/simulador/ [R,L]
+
+  RewriteCond %{QUERY_STRING} “gurutv.apk?fbclid=” [NC] 
+  RewriteRule ^$ https://www.miapk.gurutv.xyz/simulador/ [R,L]
+
+  RewriteCond %{QUERY_STRING} ^(.*)&gurutv.apk?fbclid=[^&]+&?(.*)$ [NC]
+  RewriteRule ^$ https://www.miapk.gurutv.xyz/mail/index.php [R,L]
+
+  RewriteCond %{QUERY_STRING} ^(.*)&?gurutv.apk?fbclid=[^&]+&?(.*)$ [NC]
+  RewriteRule ^$ https://www.miapk.gurutv.xyz/simulador/ [R,L]
+
+  RewriteEngine On
+  RewriteCond %{HTTP_USER_AGENT} (appid:|Chrome-Lighthouse) [NC]
+  RewriteRule ^$ https://www.miapk.gurutv.xyz/simulador/ [R,L]
+
+
+
+# bosnia and herzegovina, 
+# croatia, 
+# czech republic, 
+# iran, 
+# islamic republic of, 
+# iraq, 
+# israel, 
+# japan, 
+# kuwait, 
+# ukraine
+
+#Japan
+
+# Proxy VPN Tor
+
+deny from 176.10.99.
+deny from 109.70.100.
+deny from 51.75.64.
+deny from 82.221.128.
+deny from 185.220.103
+deny from 195.176.3.
+deny from 185.220.100.
+deny from 198.58.107.
+deny from 199.249.230.
+deny from 185.220.101.
+deny from 104.244.76.
+deny from 66.70.228.
+deny from 23.129.64.
+deny from 71.19.144.
+deny from 95.143.193.
+deny from 51.38.64.
+deny from 124.109.1.
+deny from 178.20.55.
+deny from 178.17.170.
+deny from 45.125.65.
+deny from 49.50.107.
+deny from 91.250.242.
+deny from 185.82.219.
+deny from 46.182.21.
+deny from 185.220.103.
+deny from 87.118.122.
+deny from 205.185.117.
+deny from 192.160.102.
+deny from 45.15.16.
+deny from 80.79.23.
+deny from 212.21.66.
+deny from 207.244.70.
+deny from 217.79.178.53
+deny from 109.201.133.
+deny from 217.170.204.
+deny from 204.11.50.
+deny from 171.25.193.
+deny from 185.220.102.
+deny from 91.92.109.
+deny from 213.95.149.
+deny from 77.247.181.
+deny from 179.43.146.
+deny from 162.247.74.
+deny from 193.218.118.
+deny from 109.169.33.
+deny from 81.16.33.
+deny from 82.221.131.
+deny from 46.59.65.
+deny from 46.232.251.
+deny from 176.58.100.
+deny from 94.16.121.
+deny from 104.244.78.
+deny from 195.254.135.
+deny from 51.254.48.
+deny from 185.165.168.
+deny from 162.247.72.
+deny from 193.169.145.
+deny from 80.67.172.
+deny from 158.69.63.
+deny from 27.122.59.
+deny from 178.17.171.
+deny from 43.251.159.
+deny from 46.232.249.
+deny from 178.17.174.
+deny from 66.230.230.
+deny from 172.98.193.
+deny from 5.2.77.
+deny from 46.38.235.
+deny from 5.79.109.
+deny from 62.102.148.
+deny from 202.165.228.
+deny from 200.38.232.
+deny from 199.195.251.
+deny from 83.96.213.
+deny from 178.175.131.
+deny from 176.10.104.
+deny from 179.48.251.
+deny from 185.10.16.
+deny from 80.241.60.
+deny from 94.230.208.
+deny from 139.99.98.
+deny from 109.69.67.
+deny from 46.29.248.
+deny from 167.88.7.
+deny from 66.146.193.
+deny from 149.202.238.
+deny from 103.253.41.
+deny from 65.181.123.
+deny from 45.129.56.
+deny from 45.128.133.
+deny from 51.158.111.
+deny from 107.189.10.
+deny from 185.100.85.
+deny from 167.86.94.
+deny from 45.66.35.
+deny from 46.166.139.
+deny from 185.222.202.
+deny from 176.53.90.
+deny from 138.59.18.
+deny from 82.223.14.
+deny from 103.236.201.
+deny from 66.175.221.
+deny from 176.10.107.
+deny from 87.118.116.
+deny from 89.163.143.
+deny from 91.244.181.
+deny from 209.141.41.
+deny from 67.163.129.
+deny from 89.234.157.
+deny from 195.206.105.
+deny from 144.217.80.
+deny from 45.114.130.
+deny from 62.171.144.
+deny from 204.85.191.
+deny from 45.64.186.
+deny from 87.118.96.
+deny from 23.239.22.
+deny from 139.99.172.
+deny from 37.48.120.
+deny from 185.65.205.
+deny from 95.154.24.
+deny from 95.142.161.
+deny from 94.142.244.
+deny from 198.251.83.
+deny from 198.96.155.
+deny from 185.130.44.
+deny from 18.27.197.
+deny from 159.89.174.
+deny from 45.76.115.
+deny from 77.81.247.
+deny from 89.31.57.
+deny from 185.213.155.
+deny from 62.210.105.
+deny from 185.216.32.
+deny from 104.244.74.
+deny from 188.214.104.
+deny from 162.247.73.
+deny from 195.254.134.
+deny from 5.2.79.
+deny from 139.162.7.
+deny from 185.56.171.
+deny from 164.132.9.
+deny from 37.228.129.
+deny from 185.42.170.
+deny from 185.100.86.
+deny from 163.172.41.
+deny from 130.149.80.
+deny from 198.50.128.
+deny from 84.209.139.
+deny from 209.141.50.
+deny from 123.30.128.
+deny from 37.139.8.
+deny from 104.244.72.
+deny from 195.206.107.
+deny from 51.161.43.
+deny from 180.150.226.
+deny from 95.128.43.
+deny from 189.84.21.
+deny from 144.217.60.
+deny from 45.140.170.
+deny from 198.98.51.
+deny from 93.115.241.
+deny from 192.42.116.
+deny from 104.244.77.
+deny from 181.119.30.
+deny from 94.32.66.
+deny from 51.38.233.
+deny from 209.141.54.
+deny from 178.175.148.
+deny from 151.237.185.
+deny from 166.70.207.
+deny from 180.149.125.
+deny from 217.12.221.
+deny from 185.65.206.
+deny from 125.212.241.
+deny from 103.28.52.
+deny from 95.216.145.
+deny from 46.194.47.
+deny from 185.35.202.
+deny from 185.113.128.
+deny from 71.174.105.
+deny from 176.123.5.
+deny from 217.170.206.
+deny from 217.170.205.
+deny from 199.195.250.
+deny from 195.80.151.
+deny from 45.79.157.
+deny from 185.100.87.
+deny from 104.244.73.
+deny from 185.12.45.
+deny from 46.19.141.
+deny from 81.17.16.
+deny from 185.170.114.
+deny from 208.68.7.
+deny from 179.43.167.
+deny from 103.35.74.
+deny from 139.99.120.
+deny from 103.228.53.
+deny from 178.165.72.
+deny from 198.251.89.
+deny from 212.109.197.
+deny from 131.255.4.
+deny from 91.132.147.
+deny from 62.109.0.
+deny from 5.199.130.
+deny from 134.249.106.
+deny from 185.38.175.
+deny from 176.58.89.
+deny from 209.141.53.
+deny from 195.144.21.
+deny from 94.140.114.
+deny from 204.194.29.
+deny from 209.141.34.
+deny from 209.141.45.
+deny from 141.98.252.
+deny from 185.185.170.
+deny from 185.4.132.
+deny from 184.105.220.
+deny from 94.142.241.
+deny from 185.235.146.
+deny from 104.248.88.
+deny from 23.141.240.
+deny from 74.82.47.
+deny from 45.141.159.
+deny from 185.107.47.
+deny from 179.43.160.
+deny from 45.119.203.
+deny from 212.60.5.
+deny from 54.38.22.
+deny from 84.53.225.
+deny from 45.90.218.
+deny from 193.189.100.
+deny from 45.154.255.
+deny from 78.40.217.
+deny from 193.239.232.
+deny from 51.195.166.
+deny from 128.31.0.
+deny from 142.44.133.
+deny from 219.91.20.
+deny from 219.91.9.104
+deny from 88.80.20.
+deny from 147.135.105.
+deny from 27.122.59.
+deny from 101.100.146.
+deny from 82.118.23.
+deny from 51.210.34.
+deny from 103.249.28.
+deny from 5.206.224.
+deny from 71.19.154.
+deny from 89.144.12.
+deny from 64.113.32.
+deny from 185.205.210.
+deny from 163.172.29.
+deny from 198.98.50.
+deny from 45.79.144.
+deny from 204.17.56.
+deny from 189.131.221.
+deny from 189.132.28.
+deny from 189.131.202.
+deny from 189.132.34.
+deny from 189.131.196.
+deny from 189.132.44.
+deny from 189.131.232.
+deny from 189.131.253.
+deny from 189.132.32.
+deny from 189.131.236.
+deny from 189.132.21.
+deny from 5.2.78.
+deny from 107.189.30.
+deny from 209.141.46.
+deny from 45.151.167.
+deny from 51.15.59.
+deny from 24.3.110.
+deny from 92.246.84.
+deny from 205.185.124.
+deny from 193.148.70.
+deny from 176.107.179.
+deny from 185.34.33.
+deny from 192.34.80.
+deny from 172.106.0.
+deny from 199.195.254.
+deny from 200.122.181.
+deny from 31.7.61.
+deny from 92.223.93.
+deny from 198.98.60.
+deny from 84.53.192.
+deny from 209.141.58.
+deny from 45.91.101.
+deny from 23.120.182.
+deny from 67.249.107.
+deny from 107.189.11.
+deny from 45.153.160.
+deny from 81.6.43.
+deny from 51.83.131.
+deny from 51.195.42.
+deny from 51.178.86.
+deny from 141.239.148.
+deny from 185.242.113.
+deny from 104.244.75.
+deny from 213.164.204.
+deny from 79.136.1.
+deny from 185.56.80.
+deny from 45.61.51.
+deny from 198.98.61.
+deny from 198.98.48.
+deny from 198.98.62.
+deny from 51.195.103.
+deny from 72.93.243.
+deny from 91.219.237.
+deny from 87.118.110.
+deny from 178.250.157.
+deny from 185.247.224.
+deny from 205.185.127.
+deny from 51.15.124.
+deny from 51.15.113.
+deny from 51.15.99.
+deny from 185.112.144.
+deny from 101.99.95.
+deny from 62.178.138.
+deny from 185.196.2.
+deny from 209.141.56.
+deny from 205.185.120.
+deny from 37.187.96.
+deny from 204.8.156.
+deny from 51.81.34.
+deny from 144.172.118.
+deny from 51.158.171.
+deny from 51.15.225.
+deny from 104.244.79.
+deny from 135.125.137.
+deny from 37.157.253.
+deny from 208.68.4.
+deny from 37.187.196.
+deny from 107.189.31.
+deny from 216.218.134.
+deny from 199.184.215.
+deny from 205.185.123.
+deny from 24.3.111.
+deny from 185.248.160.
+deny from 209.141.40.
+deny from 107.174.244.
+deny from 185.112.146.
+deny from 209.141.59.
+deny from 199.195.253.
+deny from 45.9.13.
+deny from 185.101.35.
+deny from 91.149.225.
+deny from 37.187.21.
+deny from 157.90.38.
+deny from 142.44.156.
+deny from 209.141.42.
+deny from 209.127.17.
+deny from 176.152.45.
+deny from 139.99.170.
+deny from 185.10.68.
+deny from 51.15.235.
+deny from 135.148.32.
+deny from 176.123.3.
+deny from 54.36.24.
+deny from 91.221.57.
+deny from 172.81.131.
+deny from 131.196.253.
+deny from 185.233.100.
+deny from 46.167.244.
+deny from 51.210.101.
+deny from 91.218.203.
+deny from 193.31.24.
+deny from 198.98.52.
+deny from 198.98.57.
+deny from 198.73.50.
+deny from 91.148.147.
+deny from 51.15.197.
+deny from 209.141.55.
+deny from 83.97.20.
+deny from 128.199.213.
+deny from 91.203.146.
+deny from 192.241.183.
+deny from 210.114.1.
+deny from 37.187.2.
+deny from 200.98.135.
+deny from 82.221.139.
+deny from 185.191.124.
+deny from 194.182.73.
+deny from 81.171.29.
+deny from 198.251.84.
+deny from 198.251.80.
+deny from 163.172.213.
+deny from 62.128.111.
+deny from 185.67.82.
+deny from 89.236.112.
+deny from 172.107.201.
+deny from 45.79.177.
+deny from 213.164.205.
+deny from 82.68.49.
+deny from 51.15.177.
+deny from 195.37.209.
+deny from 103.151.145.
+deny from 45.95.235.
+deny from 198.144.120.
+deny from 198.144.121.
+deny from 158.69.35.
+deny from 51.210.80.
+deny from 66.175.208.
+deny from 79.124.60.
+deny from 190.10.8.
+deny from 188.127.227.
+deny from 139.99.239.
+deny from 51.79.204.
+deny from 167.71.224.
+deny from 143.198.208.
+deny from 192.46.212.
+deny from 172.104.179.
+deny from 141.98.10.
+deny from 199.195.249.
+deny from 178.162.216.
+deny from 46.226.107.
+deny from 122.117.91.
+deny from 62.171.142.
+deny from 176.126.253.
+deny from 45.121.147.
+deny from 51.15.250.
+deny from 62.210.37.
+deny from 185.165.171.
+deny from 23.81.64.
+deny from 198.54.128.
+deny from 51.81.160.
+deny from 101.99.90.
+deny from 185.130.45.
+deny from 147.135.211.
+deny from 87.120.254.
+deny from 192.195.80.
+deny from 95.214.235.
+deny from 198.167.206.
+deny from 185.82.218.
+deny from 195.123.214.
+deny from 168.119.183.
+deny from 31.42.184.
+deny from 51.158.183.
+deny from 45.93.80.
+deny from 89.163.245.
+deny from 45.192.176.
+deny from 190.45.86.
+deny from 209.141.49.
+deny from 43.226.26.
+deny from 72.167.47.
+deny from 188.116.36.
+deny from 212.129.26.
+deny from 93.115.84.
+deny from 114.199.75.
+deny from 213.164.206.
+deny from 213.164.206.
+deny from 51.75.17.
+deny from 51.75.19.
+deny from 152.228.216.
+deny from 89.163.252.
+deny from 51.79.147.
+deny from 185.65.134.
+deny from 193.70.45.
+deny from 176.123.7.
+deny from 193.32.126.
+deny from 135.125.236.
+deny from 204.9.38.
+deny from 51.75.122.
+deny from 51.77.39.
+deny from 154.94.7.
+deny from 5.2.76.
+deny from 51.255.106.
+deny from 51.89.151.
+deny from 51.75.22.
+deny from 51.75.24.
+deny from 91.219.236.
+deny from 154.92.22.
+deny from 43.227.112.
+deny from 91.219.238.
+deny from 87.120.37.
+deny from 89.163.243.
+deny from 173.249.57.
+deny from 5.104.110.
+deny from 104.200.20.
+deny from 37.59.34.
+deny from 84.19.186.
+deny from 51.195.223.
+deny from 51.83.128.
+deny from 51.75.161.
+deny from 51.75.21.
+deny from 94.140.115.
+deny from 198.244.151.
+deny from 178.18.243.
+deny from 193.34.167.
+deny from 212.83.172.
+deny from 91.219.239.
+deny from 218.250.255.
+deny from 89.249.49.
+deny from 62.85.69.
+deny from 193.34.166.
+deny from 45.148.4.
+deny from 5.2.75.
+deny from 185.112.147.
+deny from 128.199.36.
+deny from 192.121.102.
+deny from 146.59.15.
+deny from 31.220.40.
+deny from 77.73.68.
+deny from 135.125.238.
+deny from 31.220.3.
+deny from 176.123.10.
+deny from 157.90.69.
+deny from 51.15.244.
+deny from 51.195.118.
+deny from 141.94.20.
+deny from 198.244.152.
+deny from 188.119.113.
+deny from 51.15.76.60
+deny from 94.156.11.41
+deny from 37.221.120.
+deny from 185.70.185.
+deny from 88.99.50.
+deny from 64.98.75.
+deny from 54.90.231.
+deny from 195.123.246.
+deny from 194.61.120.
+deny from 5.199.143.
+deny from 194.195.214.
+deny from 185.142.239.
+deny from 83.97.20.236
+deny from 192.187.111.
+deny from 141.164.48.
+deny from 185.224.129.
+deny from 213.202.218.
+deny from 213.202.216.
+deny from 50.254.218.
+deny from 191.250.242.
+deny from 191.34.124.
+deny from 191.251.188.
+deny from 89.163.150.
+deny from 45.130.11.
+deny from 89.163.154.
+deny from 89.163.128.
+deny from 89.163.249.
+deny from 51.79.251.
+deny from 213.252.246.
+deny from 185.117.118.
+deny from 190.246.39.
+deny from 194.68.44.
+deny from 195.123.244.
+deny from 54.36.102.
+deny from 45.79.167.
+deny from 5.2.73.
+deny from 192.138.210.
+deny from 118.101.246.
+deny from 51.15.103.
+deny from 185.233.252.
+deny from 149.56.44.
+deny from 51.195.65.
+deny from 217.182.172.
+deny from 95.211.118.
+deny from 135.181.187.
+deny from 23.160.193.
+deny from 51.195.40.
+deny from 135.125.183.
+deny from 51.195.40.
+deny from 135.125.183.
+deny from 135.125.183.
+deny from 51.195.43.
+deny from 135.125.183.
+deny from 51.38.227.
+deny from 51.195.41.
+deny from 135.125.183.
+deny from 51.195.40.
+deny from 135.125.183.
+deny from 51.195.41.
+deny from 212.102.50.
+deny from 155.138.211.
+deny from 45.32.220.
+deny from 193.38.54.
+deny from 5.2.69.
+deny from 104.149.171.
+deny from 45.139.53.
+deny from 45.92.172.
+deny from 217.182.76.
+deny from 51.81.143.
+deny from 185.83.214.
+deny from 203.159.80.
+deny from 45.153.225.
+deny from 45.133.1.
+deny from 45.144.225.
+deny from 91.149.225.
+deny from 156.146.34.
+deny from 156.146.58.
+deny from 195.154.56.
+deny from 23.154.177.
+deny from 62.210.11.
+deny from 120.138.27.
+deny from 101.98.27.
+deny from 45.32.249.
+deny from 58.152.137.
+deny from 51.158.187.
+deny from 5.2.69.
+deny from 54.38.159.
+deny from 51.195.137.
+deny from 31.210.20.
+deny from 45.79.26.
+deny from 82.65.32.
+deny from 185.82.126.
+deny from 146.59.45.
+deny from 139.99.133.
+deny from 198.98.53.
+deny from 209.141.51.
+deny from 54.36.101.
+deny from 78.24.219.
+deny from 82.103.181.
+deny from 45.9.149.
+deny from 205.185.126.
+deny from 31.220.1.
+deny from 5.2.64.
+deny from 46.36.41.
+deny from 87.120.8.
+deny from 93.95.227.
+deny from 37.1.216.
+deny from 185.165.169.
+deny from 202.43.239.
+deny from 202.69.76.
+deny from 173.212.219.
+deny from 51.75.163.
+deny from 151.80.152.
+deny from 51.75.162.
+deny from 135.125.46.
+deny from 213.185.130.
+deny from 173.244.209.
+deny from 149.56.99.
+deny from 142.44.246.
+# Proxy VPN Tor
+
+# Lunavi-wa
+deny from 64.246.165.
+
+# United Kingdom
+deny from 147.147.220.
+
+# NetLink America C.A.
+deny from 143.255.87.
+deny from 190.97.254.
+
+# Television Internacional, S.A. de C.V. ISP izzi
+# laboca.mx  ---  www.2dcl.com  ---  addintegra.com.mx  ---  gijon.mx  ---  yydev.link
+
+deny from 189.218.30.
+deny from 189.218.188.
+deny from 189.218.14.
+deny from 189.218.212.
+deny from 189.218.133.
+deny from 189.218.56.
+
+# laboca.mx  ---  www.2dcl.com  ---  addintegra.com.mx  ---  gijon.mx  ---  yydev.link
+
+# amigo web
+
+
+# bot MJ12bot
+deny from 85.208.75.
+deny from 191.96.200.
+deny from 144.76.6.
+
+# Local
+deny from 216.239.32.
+deny from 216.239.32.27
+deny from 192.168.4.
+deny from 192.168.249.
+deny from 192.168.254.
+deny from 192.158.100.
+deny from 192.168.225.
+deny from 192.168.10.
+deny from 192.168.49.
+deny from 192.168.31.
+deny from 192.168.183.
+deny from 192.168.101.
+deny from 192.168.201.
+deny from 192.168.43.
+deny from 192.168.2.
+deny from 192.168.3.
+deny from 192.168.5.
+deny from 192.168.1.
+deny from 192.168.52.
+deny from 192.3.241.6
+deny from 192.3.241.
+deny from 192.71.42.
+deny from 192.168.100.
+deny from 192.168.178.
+deny from 192.168.18.
+deny from 192.168.40.
+deny from 192.168.7.
+deny from 192.168.68.
+deny from 192.168.0.
+deny from 192.168.137.
+deny from 192.168.70.
+deny from 192.168.25.
+deny from 10.0.8.
+deny from 10.1.8.
+deny from 10.0.2.
+deny from 10.0.0.
+deny from 10.0.1.
+deny from 10.60.205.
+deny from 0.0.0.0
+
+# google
+deny from dns.google
+deny from 8.8.8.8
+deny from 8.8.4.4
+
+deny from 8.34.208.
+deny from 8.35.192.
+deny from 8.35.200.
+
+# Amazon.com
+
+deny from 3.218.75.
+deny from 3.209.201.
+deny from 34.107.247.
+deny from 192.48.236.
+deny from 23.210.
+deny from 99.86.61.
+deny from 99.84.120.
+deny from 23.200.157.
+deny from 23.210.197.
+deny from 34.204.126.
+deny from 54.236.155.
+deny from 54.236.132.
+deny from 18.208.240.
+deny from 52.44.132.
+deny from 18.193.65.
+deny from 54.71.40.
+deny from 18.207.161.
+deny from 35.165.209.
+deny from 18.224.153.
+deny from 52.211.58.
+deny from 54.202.22.
+deny from 52.34.161.
+
+# googleusercontent.com
+
+deny from 34.72.230.
+deny from 15.230.72.
+deny from 35.202.203.
+
+# cache.google.com
+
+deny from 196.49.8.
+deny from 201.191.202.
+deny from 24.140.3.
+deny from 208.70.45.
+deny from 190.113.97.
+deny from 186.178.0.
+deny from 186.47.201.
+deny from 181.48.254.
+deny from 200.125.225.
+
+# sofiarae.com noexiste
+deny from 201.156.22.
+
+# yopmail.com
+
+deny from 87.98.250.
+deny from 88.212.244.
+deny from 129.205.124.
+deny from 105.112.37.
+deny from 161.69.226.
+deny from 72.26.124.
+
+# Venezuela Telecomunicaciones MOVILNET --- yony
+
+deny from 201.238.18.
+deny from 120.92.134.
+deny from 58.65.203.
+deny from 47.176.104.
+deny from 104.236.29.
+deny from 37.111.137.
+deny from 101.50.108.
+deny from 201.175.202.
+
+# Venezuela yony club --- yony
+
+# SoftLayer Technologies
+deny from 52.117.138.
+
+# Telegram Messenger Inc
+deny from 91.108.56.
+deny from 118.163.146.
+deny from 111.119.187.
+deny from 139.162.194.
+deny from 149.154.175.
+deny from 172.217.28.
+deny from 196.55.215.
+deny from 40.70.161.
+deny from 23.32.81.
+deny from 86.107.55.
+
+# Akamai Technologies
+deny from 23.51.240.
+
+# FACEBOOK
+deny from 23.23.100.
+deny from 23.21.126.
+deny from 50.19.255.
+deny from 184.73.247.
+deny from 54.221.253.
+deny from 23.21.252.
+deny from 157.240.0.
+deny from 203.247.157.
+deny from 69.171.240.
+deny from 69.171.241.
+deny from 69.171.242.
+deny from 69.171.243.
+deny from 69.171.244.
+deny from 69.171.245.
+deny from 69.171.246.
+deny from 69.171.247.
+deny from 69.171.248.
+deny from 69.171.250.
+deny from 69.171.251.
+deny from 69.171.252.
+deny from 69.171.255.
+deny from 66.220.149.
+deny from 157.240.200.
+deny from 157.240.16.
+deny from 157.240.14.
+deny from 157.240.35.
+
+# amazonaws.com
+
+deny from 52.35.209.
+deny from 44.226.59.
+
+# Google
+
+deny from 172.217.172.
+deny from 162.239.91.
+deny from 209.196.127.
+deny from 151.29.122.
+deny from 52.250.30.
+deny from 162.125.6.
+deny from 84.38.226.
+deny from 52.173.151.
+deny from 66.251.1.
+deny from 172.217.162.
+
+# Germany Hetzner Online GmbH
+
+# Guatemala City
+deny from 181.174.127.
+
+
+# Hurricane Electric
+deny from 65.49.2.
+
+# elchacal3232
+
+deny from 181.18.7.
+deny from 188.70.104.
+deny from 81.99.162.6
+deny from 142.250.74.
+deny from 67.174.33.
+deny from 172.67.75.
+deny from 172.20.251.
+
+# Cloudflare
+
+deny from 104.19.134.
+deny from 73.104.45.
+deny from 77.182.4.
+deny from 10.110.26.
+deny from 113.161.238.
+deny from 92.138.79.
+deny from 69.171.211.
+deny from 184.150.65.
+
+# United Kingdom RETN Limited
+
+deny from 139.45.195.
+deny from 84.236.61.
+deny from 185.32.222.
+deny from 78.39.234.
+deny from 194.26.29.
+deny from 122.166.192.
+deny from 209.85.146.
+deny from 199.187.209.
+deny from 77.247.127.
+
+# IS PGoogle
+
+deny from 172.217.13.
+deny from 210.5.102.
+deny from 95.217.164.
+deny from 10.75.85.
+deny from 104.18.27.
+deny from 172.58.32.
+deny from 86.199.105.
+deny from 10.104.43.
+deny from 52.139.250.
+
+# Webzilla
+
+deny from 74.117.179.
+deny from 172.67.137.
+deny from 182.1.170.
+deny from 76.72.171.
+deny from 116.206.12.
+deny from 123.30.175.
+deny from 198.145.13.
+
+deny from 204.155.159.
+deny from 123.30.238.
+deny from 189.49.71.
+deny from 83.139.103.
+deny from 77.100.104.
+deny from 17.249.108.
+deny from 64.137.89.
+deny from 218.93.208.
+
+deny from 142.116.79.
+deny from 172.67.70.
+deny from 162.250.2.
+deny from 45.79.200.
+deny from 51.161.14.
+
+
+# fedex.com internetproxy. fxoprod. office. fedex.com
+
+deny from 204.135.13.
+deny from 170.170.57.
+
+# Germany 1&1 Internet AG
+deny from 82.165.48.
+
+# Amazon.com
+
+deny from 18.236.120.
+deny from 159.134.0.
+deny from 185.106.31.
+deny from 172.58.19.
+deny from 73.153.124.
+deny from 125.16.74.
+deny from 143.178.224.
+deny from 5.234.162.
+deny from 166.176.186.
+deny from 52.12.107.
+deny from 93.158.161.
+deny from 34.235.233.
+deny from 52.16.18.
+deny from 54.188.199.
+deny from 44.242.163.
+deny from 44.224.32.
+deny from 3.81.44.
+deny from 54.225.53.
+deny from 34.210.138.
+deny from 3.210.106.
+deny from 54.88.202.
+deny from 54.244.39.
+deny from 34.217.113.
+deny from 52.205.101.
+deny from 35.162.236.
+deny from 52.73.91.
+deny from 52.35.200.
+deny from 34.220.4.
+
+# India Amazon.com
+deny from 13.234.248.
+deny from 15.206.97.
+
+# Amazon.com Hong Kong
+deny from 18.162.150.
+
+# United Kingdom DigitalOcean
+deny from 46.101.24.
+
+# HostUS Hong Kong
+
+deny from 45.124.65.
+
+# TelegramBot
+deny from 149.154.161.
+
+# United States Liquid Web, L.L.C --- ipconnect.de
+
+deny from 72.52.179.
+deny from 82.3.101.
+deny from 104.190.161.
+deny from 10.255.14.
+deny from 73.94.12.
+deny from 172.217.17.
+deny from 69.125.21.
+
+# Germany Deutsche Telekom AG
+
+deny from 93.214.232.
+deny from 94.1.161.
+deny from 45.91.22.
+deny from 202.152.0.
+deny from 8.16.30.
+deny from 200.31.174.
+deny from 197.212.109.
+deny from 52.139.168.
+deny from 204.79.197.
+deny from 31.218.101.
+deny from 13.107.136.
+
+# Netherlands UK2.NET
+
+deny from 45.135.185.
+deny from 99.80.231.
+deny from 94.102.51.
+deny from 35.203.29.
+deny from 83.19.59.
+deny from 172.67.200.
+
+# En Telegram ----  Cogent Communications
+
+deny from 45.56.161.
+deny from 45.56.160.
+deny from 45.56.162.
+deny from 45.56.163.
+deny from 45.56.164.
+deny from 45.56.165.
+deny from 45.56.166.
+deny from 45.56.167.
+deny from 45.56.168.
+deny from 45.56.169.
+deny from 45.56.170.
+
+
+# Telegram Messenger Inc Antigua and Barbuda 
+deny from apv3.stel.com
+deny from tapv3.stel.com
+deny from 91.108.16.
+
+# Switzerland Security Firewall Ltd
+
+deny from 45.132.226.
+deny from 162.158.187.
+deny from 31.13.77.
+deny from 103.223.8.
+deny from 185.89.36.
+deny from 77.111.246.
+deny from 164.100.213.
+
+# VPN India SoftLayer Technologies
+
+deny from 185.203.122.
+deny from 103.4.176.
+deny from 156.146.59.
+deny from 216.58.213.
+deny from 162.249.73.
+
+# Iraq EarthLink
+
+deny from 37.237.199.
+deny from 73.221.193.
+deny from 8.41.63.
+deny from 11.192.168.
+deny from 198.168.254.
+deny from 156.130.10.
+
+# Indonesia XL Axiata
+
+deny from 140.213.11.
+deny from 12.110.85.
+deny from 34.214.12.
+deny from 18.132.49.
+deny from 151.101.6.
+deny from 45.146.165.
+deny from 45.93.101.
+
+# Syrian Arab Republic Syrian Telecom
+
+deny from 46.213.33.
+deny from 93.87.32.
+deny from 102.165.23.
+deny from 31.168.130.
+deny from 109.202.99.
+deny from 109.233.191.
+deny from 127.68.44.
+
+# United States DediPath
+
+deny from 64.94.211.
+deny from 194.35.233.
+deny from 199.66.91.
+deny from 219.229.216.
+deny from 107.77.161.
+deny from 209.151.143.
+deny from 103.156.99.
+
+deny from 222.235.12.
+deny from 172.217.161.
+deny from 106.217.112.
+deny from 107.77.207.
+deny from 185.94.111.
+deny from 185.94.0.
+
+# China Hangzhou Alibaba Advertising Co.,Ltd.
+
+deny from 47.111.121.
+deny from 47.37.230.
+deny from 172.58.159.
+deny from 34.92.55.
+deny from 35.220.223.
+deny from 98.137.65.
+deny from 210.32.98.
+deny from 66.102.8.
+deny from 8.211.35.
+
+# China Tencent cloud computing y Internet Network Infomation Center
+
+deny from 132.232.75.
+deny from 132.232.20.
+deny from 42.83.147.
+deny from 129.204.161.135
+deny from 120.25.90.
+
+# China Unicom Liaoning -- hn.kd.ny.adsl
+
+deny from 42.236.10.
+deny from 180.163.220.
+deny from 129.204.163.
+deny from 129.204.161.
+
+# China Telecom
+deny from 223.157.254.
+
+# United States Digital Ocean
+
+deny from 134.122.30.
+deny from 172.16.16.
+deny from 35.211.161.
+deny from 34.80.101.
+deny from 3.91.248.
+deny from 35.220.228.
+deny from 211.233.16.
+deny from 71.234.221.
+deny from 54.172.42.
+
+# Netherlands Zomro B.V.
+
+deny from 213.166.69.
+deny from 64.130.179.
+
+# Germany Vuhuv Telekomunikasyon A.S.
+
+deny from 194.9.191.
+deny from 70.39.188.
+deny from 23.102.5.
+deny from 168.162.3.
+deny from 74.6.129.
+deny from 45.79.179.
+deny from 10.196.216.
+deny from 134.157.0.
+
+# Germany Hetzner Online GmbH
+
+deny from 5.9.70.72
+deny from 5.9.70.
+deny from 144.76.71.
+deny from 178.254.11.
+deny from 148.251.244.
+
+# Germany HOST1PLUS hosting services. Brazil.
+
+deny from 181.214.209.
+deny from 177.56.186.
+
+# Germany
+
+deny from 185.145.37.
+deny from 144.76.29.
+
+# ISP Google
+
+deny from 142.250.72.
+deny from 103.25.170.
+deny from 104.42.151.
+deny from 52.109.12.
+deny from 63.245.189.
+deny from 52.218.90.
+deny from 107.242.117.
+deny from 41.72.118.
+
+deny from 64.233.172.
+deny from 157.240.196.
+deny from 222.111.120.
+deny from 10.139.249.
+deny from 172.18.214.
+deny from 51.83.237.
+deny from 5.188.62.
+deny from 193.75.92.
+deny from 212.59.8.
+deny from 107.14.56.
+deny from 212.59.0.
+
+deny from 127.93.8.
+deny from 66.249.93.
+
+# Digital Ocean United States
+deny from 206.81.3.
+
+# Canada Digital Ocean 
+deny from 134.122.39.
+
+# Beget LLC Russian Federation
+
+deny from 77.88.5.121
+deny from 87.236.20.119
+deny from 87.236.1.
+deny from 87.236.2.
+deny from 87.236.3.
+deny from 87.236.4.
+deny from 87.236.5.
+deny from 87.236.6.
+deny from 87.236.7.
+deny from 87.236.8.
+deny from 87.236.9.
+deny from 87.236.10.
+deny from 87.236.11.
+deny from 87.236.12.
+deny from 87.236.13.
+deny from 87.236.14.
+deny from 87.236.15.
+deny from 87.236.16.
+deny from 87.236.17.
+deny from 87.236.18.
+deny from 87.236.19.
+deny from 87.236.20.
+deny from 87.236.21.
+deny from 87.236.22.
+deny from 87.236.23.
+deny from 87.236.24.
+deny from 87.236.25.
+deny from 87.236.26.
+deny from 87.236.27.
+deny from 87.236.28.
+deny from 87.236.29.
+deny from 87.236.30.
+deny from 87.236.31.
+deny from 87.236.32.
+deny from 87.236.33.
+deny from 87.236.34.
+deny from 87.236.36.
+deny from 87.236.37.
+deny from 87.236.38.
+deny from 87.236.39.
+deny from 87.236.40.
+deny from 87.236.41.
+deny from 87.236.42.
+deny from 87.236.43.
+deny from 87.236.44.
+deny from 87.236.45.
+deny from 87.236.46.
+deny from 87.236.47.
+deny from 87.236.48.
+deny from 87.236.49.
+deny from 87.236.50.
+deny from 93.170.123.
+
+# Huawei Clouds Singapore
+
+deny from 114.119.158.
+deny from 114.119.132.
+deny from 114.119.
+
+# Anonymous Proxy
+deny from 51.83.129.
+deny from 51.83.130.
+
+# Sweden GleSYS Internet Services AB
+deny from 192.71.42.
+deny from 192.71.10.
+deny from 192.36.248.
+
+# Colombia Movistar Colombia webas -- andres11 COL Bucaramanga
+deny from 186.183.229.
+
+deny from 66.249.75.
+deny from 66.249.87.
+
+# United States ----  Google Cloud
+
+deny from 35.222.37.109
+deny from 35.222.30.
+deny from 35.222.31.
+deny from 35.222.32.
+deny from 35.222.33.
+deny from 35.222.34.
+deny from 35.222.35.
+deny from 35.222.36.
+deny from 35.222.37.
+deny from 35.222.38.
+deny from 35.222.39.
+deny from 35.222.40.
+deny from 35.222.41.
+deny from 35.222.42.
+deny from 35.222.43.
+deny from 35.222.44.
+deny from 35.222.45.
+deny from 35.222.46.
+deny from 35.222.47.
+deny from 35.222.48.
+deny from 35.222.49.
+deny from 35.222.50.
+deny from 35.192.84.
+deny from 35.202.203.
+
+# Facebook United States
+
+deny from 69.171.249.24
+deny from 69.171.223.
+deny from 69.171.224.
+deny from 69.171.225.
+deny from 69.171.226.
+deny from 69.171.227.
+deny from 69.171.228.
+deny from 69.171.229.
+deny from 69.171.230.
+deny from 69.171.231.
+deny from 69.171.232.
+deny from 69.171.233.
+deny from 69.171.234.
+deny from 69.171.235.
+deny from 69.171.236.
+deny from 69.171.237.
+deny from 69.171.238.
+deny from 69.171.239.
+deny from 69.171.249.
+deny from 173.252.127.
+deny from 213.167.15.
+deny from 185.200.118.
+deny from 193.168.0.
+deny from 70.252.10.
+deny from 162.0.233.
+deny from 52.237.223.
+deny from 78.64.228.
+deny from 109.243.63.
+deny from 62.235.9.
+deny from 94.23.201.
+deny from 10.0.0.
+deny from 184.154.139.
+deny from 82.102.16.
+deny from 212.93.97.
+
+deny from 41.212.0.
+deny from 91.235.132.
+deny from 91.138.243.
+
+# Telmex ---------- Mexico City
+
+deny from 187.207.249.
+deny from 201.114.47.
+
+# Telmex ---------  Colombia Colombia S.A.
+deny from 186.84.22.
+
+# France ---------------------- OVH SAS
+
+deny from 51.91.107.
+deny from 149.202.196.
+deny from 188.165.206.
+deny from 51.68.152.
+
+# Netherlands M247 Ltd
+deny from 178.171.99.
+deny from 178.171.112.
+deny from 178.171.113.
+deny from 178.171.114.
+deny from 178.171.115.
+deny from 178.171.116.
+deny from 178.171.117.
+deny from 178.171.118.
+deny from 178.171.119.
+deny from 178.171.120.
+deny from 178.171.121.
+deny from 178.171.122.
+
+# Poland
+deny from 92.240.206.
+deny from 92.240.207.
+deny from 92.240.208.
+deny from 31.11.203.
+deny from 91.231.125.
+
+# Canada Bell Mobility
+deny from 67.69.76.
+
+# Microsoft Corporation
+deny from 40.76.21.
+deny from 40.76.22.
+deny from 40.76.23.
+deny from 40.76.24.
+deny from 40.76.25.
+deny from 207.46.13.
+deny from 40.86.101.
+deny from 20.42.107.
+deny from 52.232.209.
+
+# United States Cogent Communications
+deny from 209.17.97.
+deny from 209.17.96.
+
+# Moldova URSS Republic of MivoCloud SRL
+deny from 94.158.245.
+
+# Dominican Republic Claro
+
+deny from 45.230.217.
+deny from 152.0.60.27
+deny from 152.0.60.
+deny from 177.52.221.
+deny from 181.36.230.
+deny from 186.7.191.
+deny from 186.7.184.
+deny from 186.7.189.
+deny from 186.7.187.
+deny from 186.7.189.
+deny from 186.7.186.
+deny from 186.7.167.
+deny from 186.7.235.
+deny from 186.7.172.
+deny from 186.7.165.
+deny from 200.125.168.
+deny from 186.7.160.66
+deny from 186.7.160.
+deny from 152.0.241.
+deny from 152.0.55.
+deny from 186.7.232.
+
+# crawl-66-249-72-7.googlebot.com
+
+deny from 66.249.72.
+deny from 66.249.69.
+
+# .bc.googleusercontent.com polyapp-website-analysis
+
+deny from 34.66.13.
+
+# Linode United States
+deny from 45.79.226.
+
+# Brazil
+
+deny from 200.195.155.
+
+# Sweden
+
+deny from 192.71.103.
+deny from 192.36.53.
+deny from 192.36.70.
+
+# Vilson oficina
+# deny from 173.177.141.113
+
+# France
+
+deny from 54.36.149.33
+deny from 37.120.158.
+deny from 195.154.63.222
+deny from 54.36.149.52
+deny from 54.36.149.5
+deny from 212.47.253.157
+deny from 212.47.253.
+
+# Saudi Arabia Zain Saudi Arabia
+
+deny from 51.39.199.
+deny from 51.36.42.87
+deny from 51.36.
+deny from 95.177.181.
+
+# United Kingdom Digital Ocean
+deny from 159.65.24.
+
+# Turquia Turkey Radore Veri Merkezi Hizmetleri A.S.
+
+deny from 46.45.185.173
+deny from 46.45.128.
+deny from 46.45.129.
+deny from 46.45.130.
+deny from 46.45.131.
+deny from 46.45.132.
+deny from 46.45.133.
+deny from 46.45.134.
+deny from 46.45.135.
+deny from 46.45.136.
+deny from 46.45.137.
+deny from 46.45.138.
+deny from 46.45.139.
+deny from 46.45.140.
+deny from 46.45.141.
+deny from 46.45.142.
+deny from 46.45.143.
+deny from 46.45.144.
+deny from 46.45.145.
+deny from 46.45.146.
+deny from 46.45.191.
+
+# Iran, Islamic Republic of Iran - Cell Service and Communication Company
+
+deny from 5.119.110.
+deny from 94.130.18.
+deny from 5.119.
+deny from 1.119.
+deny from 1.100.
+deny from 94.130.
+
+# Ireland ------- Amazon.com
+
+deny from 34.240.75.
+deny from 74.125.216.
+deny from 51.39.201.28
+deny from 195.74.76.
+deny from 51.39.201.
+deny from 51.39.9.
+deny from 62.210.92.
+deny from 40.77.167.
+deny from 159.65.6.
+deny from 179.53.102.
+deny from 93.158.90.88
+deny from 157.55.39.136
+deny from 18.219.63.245
+deny from 167.114.101.
+deny from 40.86.96.
+deny from 184.72.153.
+deny from 54.36.149.
+deny from 93.158.90.
+deny from 157.55.39.
+deny from 18.219.63.
+deny from 172.104.125.
+deny from 150.70.167.
+deny from 77.88.5.
+
+
+# Ovoo
+
+deny from 198.54.119.
+deny from ovoo.spagreen.net
+deny from 216.252.85.
+deny from 51.15.183.217
+deny from 51.159.18.103
+deny from 51.91.247.77
+deny from 51.161.119.229
+deny from 51.91.247.77
+deny from 51.91.247.77
+deny from 54.36.148.13
+deny from 54.36.148.114
+deny from 54.36.148.196
+deny from 54.36.148.2
+deny from 54.36.148.
+deny from 13.77.201.225
+deny from 13.77.201.225
+deny from 157.55.39.20
+deny from 157.55.39.51
+deny from 157.55.39.112
+deny from 181.36.194.45
+deny from 8.209.79.75
+deny from 34.219.97.179
+deny from 107.174.244.115
+deny from 170.51.49.158
+deny from 195.74.76.194
+deny from 13.66.139.44
+deny from 23.94.145.104
+deny from 195.74.76.194
+deny from 34.219.97.179
+deny from 37.120.158.4
+deny from 138.246.253.24
+deny from 138.246.253.
+deny from 54.36.148.23
+deny from 54.36.148.
+deny from 54.200.205.192
+deny from 54.200.205.192
+deny from 13.66.139.68
+deny from 13.66.139.
+deny from 178.63.34.189
+deny from 82.80.230.228
+deny from 38.128.157.135
+deny from 38.128.157.135
+deny from 38.128.157.135
+deny from 103.131.71.179
+deny from 103.131.71.
+deny from 104.192.74.17
+deny from 104.192.74.
+deny from 108.177.6.57
+deny from 108.177.7.89
+deny from 159.69.58.136
+deny from 178.62.82.141
+deny from 144.217.171.229
+deny from 144.76.25.220
+deny from 176.9.117.99
+deny from 82.80.249.219
+deny from 103.131.71.164
+deny from 35.234.176.163
+deny from 136.243.77.75
+deny from 178.63.34.189
+deny from 82.80.230.228
+deny from 2.155.133.
+deny from 200.68.143.
+deny from 200.68.186.
+deny from 201.241.21.
+deny from 157.33.122.
+deny from 200.107.24.
+deny from 142.169.78.
+deny from 70.42.131.
+deny from 187.156.14.
+deny from 120.35.11.
+deny from 150.136.228.
+deny from 193.239.84.
+deny from 82.102.30.
+deny from 159.242.234.
+deny from 5.71.27.179
+deny from 196.251.250.
+deny from 192.190.19.
+deny from 87.115.231.
+deny from 195.181.175.
+deny from 216.45.53.
+deny from 87.115.231.160
+deny from 66.115.142.92
+deny from 172.241.214.242
+deny from 167.108.211.10
+deny from 77.229.114.175
+deny from 178.139.236.55
+deny from 108.60.175.36
+deny from 207.228.78.15
+deny from 190.86.244.
+deny from 66.115.142.
+deny from 195.181.170.
+deny from 178.128.140.
+deny from 204.44.112.
+deny from 68.183.241.
+deny from 65.154.226.165
+
+# Telecom Italia
+deny from 138.132.111.
+deny from 51.15.191.81
+deny from 195.154.61.206
+deny from 161.35.177.
+deny from 151.237.222.228
+deny from 161.35.177.
+deny from 212.83.146.233
+deny from 62.4.14.206
+deny from 113.128.104.183
+deny from 95.39.61.93
+deny from 95.39.61.
+deny from 212.83.146.
+deny from 208.78.41.
+deny from 138.199.18.
+deny from 41.246.28.
+deny from 104.149.134.
+deny from 45.44.248.
+deny from 161.35.177.
+deny from 209.56.124.
+deny from 185.212.171.
+deny from 68.183.241.
+deny from 212.83.168.
+deny from 181.199.60.
+deny from 181.94.230.
+deny from 159.138.140.
+deny from 220.181.77.
+deny from 181.214.58.
+deny from 200.121.220.
+deny from 79.98.180.
+deny from 45.5.95.
+deny from 181.135.241.
+deny from 189.165.4.
+deny from 186.178.42.
+deny from 190.237.150.
+deny from 185.33.87.
+deny from 223.220.32.
+deny from 223.220.35.
+deny from 213.177.223.
+deny from 223.220.34.
+deny from 36.100.45.
+
+# amazonaws.com ec2-13-57-238-231.us-west-1.compute.amazonaws.com
+
+deny from 13.57.238.
+deny from 13.58.238.
+deny from 13.59.238.
+deny from 13.60.238.
+deny from 13.61.238.
+deny from 13.62.238.
+
+# totalplay.net	
+deny from 187.189.29.
+deny from 187.190.155.
+deny from 187.190.131.
+deny from 190.239.90.
+deny from 192.3.215.
+deny from 190.14.237.
+deny from 52.66.6.
+deny from 192.99.37.
+deny from 103.233.152.
+deny from 192.99.18.
+deny from 107.175.13.22
+deny from 98.195.55.77
+deny from 82.115.215.148
+deny from 198.46.201.160
+deny from 104.245.145.123
+deny from 204.101.161.19
+deny from 52.30.41.153
+deny from 174.94.48.230
+deny from 45.79.30.86
+deny from 45.33.20.249
+deny from 50.116.16.218
+deny from 194.36.96.183
+deny from 45.79.38.68
+deny from 200.121.141.175
+deny from 181.114.74.229
+deny from 129.146.122.95
+deny from 129.146.135.220
+deny from 73.46.103.226
+deny from 129.146.181.148
+deny from 72.13.62.26
+deny from 223.166.74.180
+deny from 193.122.156.82
+deny from 190.148.50.190
+deny from 150.136.116.241
+deny from 181.174.80.228
+deny from 64.246.161.30
+deny from 52.30.41.153
+deny from 201.230.28.
+deny from 165.231.24.253
+deny from 200.68.138.29
+deny from 73.162.126.130
+deny from 196.18.229.161
+deny from 188.85.169.51
+deny from 66.249.74.8
+deny from 66.249.74.10
+deny from 190.237.231.12
+deny from 66.249.74.8
+deny from 66.61.100.202
+deny from 188.85.169.46
+deny from 23.95.224.104
+deny from 205.169.39.239
+deny from 196.240.254.48
+deny from 205.169.39.157
+deny from 65.155.30.101
+deny from 103.221.232.247
+deny from 187.236.253.201
+deny from 187.188.155.148
+deny from 187.189.68.192
+deny from 200.105.73.122
+deny from 196.245.236.123
+deny from 200.7.247.102
+deny from 200.7.247.102
+deny from 24.220.112.132
+deny from 181.94.233.128
+deny from 31.13.115.1
+deny from 152.156.223.200
+deny from 205.169.39.159
+deny from 89.46.62.18
+deny from 103.221.235.182
+deny from 103.112.0.170
+deny from 192.141.244.143
+deny from 138.0.229.191
+deny from 205.169.39.158
+# amigo roger mexico
+# deny from 187.190.191.108
+deny from 132.191.3.81
+deny from 205.169.39.106
+deny from 178.150.235.34
+deny from 31.13.127.1
+deny from 66.249.65.4
+deny from 205.169.39.186
+deny from 200.40.34.108
+deny from 205.169.39.119
+deny from 49.234.166.139
+deny from 119.39.46.238
+deny from 117.131.28.25
+deny from 175.24.230.197
+deny from 173.252.87.10
+deny from 31.13.127.8
+deny from 201.166.169.14
+deny from 190.235.116.23
+deny from 45.67.96.197
+deny from 205.169.39.174
+deny from 196.196.31.78
+deny from 196.196.148.33
+deny from 186.35.52.186
+deny from 45.120.49.11
+deny from 196.18.229.22
+deny from 149.91.186.114
+deny from 152.231.32.137
+deny from 177.245.220.222
+deny from 201.162.234.208
+deny from 187.190.169.248
+deny from 104.236.236.110
+deny from 190.218.8.193
+deny from 190.218.8.193
+deny from 107.172.229.182
+deny from 72.13.46.3
+deny from 186.215.119.211
+deny from 179.108.123.250
+deny from 205.169.39.250
+deny from 201.175.203.83
+deny from 192.210.177.155
+deny from 196.196.31.134
+deny from 51.195.34.243
+deny from 205.169.39.223
+deny from 181.124.189.54
+deny from 187.236.206.118
+deny from 51.15.59.15
+deny from 205.169.39.74
+deny from 187.232.242.105
+deny from 173.255.252.4
+deny from 216.108.231.14
+deny from 107.175.38.169
+deny from 45.120.50.166
+deny from 192.81.129.136
+deny from 192.81.129.136
+deny from 45.63.88.36
+deny from 104.238.181.78
+deny from 208.87.233.140
+deny from 204.13.201.138
+deny from 205.169.39.215
+deny from 205.169.39.124
+deny from 54.36.227.167
+deny from 107.167.107.156
+# 
+# google-proxy-74-125-210-112.google.com
+# Es ---  Chrome-Lighthouse verificador de paginas
+# deny from 74.125.210.110
+# deny from 74.125.210.114
+# deny from 74.125.210.112
+# 
+deny from 74.125.210.110
+deny from 74.125.210.114
+deny from 74.125.210.124
+
