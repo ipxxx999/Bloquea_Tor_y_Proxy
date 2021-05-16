@@ -1,4 +1,5 @@
 # Bloquea Tor y Proxy
+Bloquea muchisimos Proxys. y la red tor
 
 Este .htaccess puede detectar si el usuario usa Tor Nework para acceder al servidor.
 
