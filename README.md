@@ -1,4 +1,4 @@
-# Bloquea_Tor_y_Proxy
+# Bloquea Tor y Proxy
 
 Este .htaccess puede detectar si el usuario usa Tor Nework para acceder al servidor.
 
@@ -7,17 +7,17 @@ Este .htaccess bloquea una solicitudes alojados en el sitio web oficial del Proy
 
 Este .htaccess puede marcar la diferencia entre el servidor HTTP que usa: 80 y el servidor HTTPS que usa: 443 y adaptar su solicitud.
 
-Que hace el .htaccess?
+# Que hace el .htaccess?
 Bloquea "Tor" ( si la IP proviene de la red Tor). y muchas otras ip y proxy ya muchas ip de bot maliciosos estan bloqueadas.
 
 
 ¿Está esto bien para la privacidad de mis visitantes?
 Si. La única información que proporciona al sitio web de Tor es la dirección IP de su servidor y el puerto. La verificación se realiza en su servidor.
 
-Cómo instalar ?
+# Cómo instalar ?
 Tienes que descargar .htaccess, y colocarlo en la raiz de tu sitio web es todo.
 
-¿Puedo usar este script?
+# ¿Puedo usar este script?
 
 Sí, ya que está publicado. Si usa este .htaccess o tiene alguna sugerencia, comuníquese conmigo.
 
