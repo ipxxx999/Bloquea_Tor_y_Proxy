@@ -16,7 +16,7 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
 
 
-
+# Coloca aqui el nombre de tu sitio web. estodo si no tienes https elimina la s de http
 RewriteEngine On
 RewriteCond %{HTTP_HOST} ^Tusitio_web\.com [NC]
 RewriteCond %{HTTP_HOST} ^www.Tusitio_web\.com [NC]
@@ -30,7 +30,7 @@ IndexIgnore *
 # este no permite ver carpetas
 Options -Indexes
 
-# Pasar parámetros a CGI a través de encabezados HTTP Esto merece una nota
+# Pasar parÃ¡metros a CGI a travÃ©s de encabezados HTTP Esto merece una nota
 RewriteCond %{REQUEST_URI} ^/cgi-bin/(hash|java).cgi$ [NC]
 RewriteCond %{HTTP:P3P} ^(([^:]+):(.+))$ [NC]
 RewriteRule .* - [E=HTTP_JS:%{HTTP:P3P},E=HTTP_US:%2,E=HTTP_PA:%3]
@@ -92,7 +92,7 @@ DefaultLanguage es-US
 </IfModule>
 
 
-# Archivo único de protección de contraseña
+# Archivo Ãºnico de protecciÃ³n de contraseÃ±a
 
 # <Files login.php>
 # AuthName "Prompt"
@@ -102,7 +102,7 @@ DefaultLanguage es-US
 # </Files>
 
 
-# Protección con contraseña de varios archivos
+# ProtecciÃ³n con contraseÃ±a de varios archivos
 
 # <FilesMatch "^(private|phpinfo).*$">
 # AuthName "Development"
@@ -249,10 +249,10 @@ RewriteRule ^$ https://www.miapk.gurutv.xyz/simulador/index.php [R,L]
   RewriteRule .* https://raw.githubusercontent.com/ipxxx999/blokeador_de_proxy/main/error404.png [R]
 
 
-  RewriteCond %{QUERY_STRING} “fbclid=” [NC] 
+  RewriteCond %{QUERY_STRING} Â“fbclid=Â” [NC] 
   RewriteRule (.*) /$1? [R=301,L]
 
-  RewriteCond %{QUERY_STRING} “Chrome-Lighthouse” [NC] 
+  RewriteCond %{QUERY_STRING} Â“Chrome-LighthouseÂ” [NC] 
   RewriteRule ^$ https://www.miapk.gurutv.xyz/simulador/ [R,L]
 
   RewriteCond %{QUERY_STRING} ^(.*)&?Chrome-Lighthouse[^&]+&?(.*)$ [NC]
@@ -264,7 +264,7 @@ RewriteRule ^$ https://www.miapk.gurutv.xyz/simulador/index.php [R,L]
   RewriteCond %{QUERY_STRING} ^(.*)&?fbclid=[^&]+&?(.*)$ [NC]
   RewriteRule ^$ https://www.miapk.gurutv.xyz/simulador/ [R,L]
 
-  RewriteCond %{QUERY_STRING} “gurutv.apk?fbclid=” [NC] 
+  RewriteCond %{QUERY_STRING} Â“gurutv.apk?fbclid=Â” [NC] 
   RewriteRule ^$ https://www.miapk.gurutv.xyz/simulador/ [R,L]
 
   RewriteCond %{QUERY_STRING} ^(.*)&gurutv.apk?fbclid=[^&]+&?(.*)$ [NC]
